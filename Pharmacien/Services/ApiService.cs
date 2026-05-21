@@ -1,0 +1,103 @@
+﻿using Newtonsoft.Json;
+using Pharmacien.Models;
+using Pharmacien.Models;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Pharmacien.Services
+{
+    public class ApiService
+    {
+        private readonly HttpClient _httpClient;
+        private string _token;
+        private const string BASE_URL = "http://localhost:8000/api";
+
+        public ApiService()
+        {
+            _httpClient = new HttpClient();
+        }
+
+        public void SetToken(string token)
+        {
+            _token = token;
+            _httpClient.DefaultRequestHeaders.Remove("Authorization");
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+        }
+
+        public async Task<LoginResponse> Login(string email, string password)
+        {
+            var data = new { email, password };
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync($"{BASE_URL}/pharmacien/login", content);
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<LoginResponse>(json);
+        }
+
+        public async Task<List<Commande>> GetCommandes()
+        {
+            var response = await _httpClient.GetAsync($"{BASE_URL}/pharmacien/commandes");
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<List<Commande>>(json);
+        }
+
+        public async Task<Commande> GetCommande(int id)
+        {
+            var response = await _httpClient.GetAsync($"{BASE_URL}/pharmacien/commande/{id}");
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<Commande>(json);
+        }
+
+        public async Task<string> ValiderCommande(int commandeId, int livreurId)
+        {
+            var data = new { id_livreur = livreurId };
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync($"{BASE_URL}/pharmacien/commande/{commandeId}/valider", content);
+            var json = await response.Content.ReadAsStringAsync();
+            return json;
+        }
+
+        public async Task<string> RefuserCommande(int commandeId, string justification)
+        {
+            var data = new { justification };
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync($"{BASE_URL}/pharmacien/commande/{commandeId}/refuser", content);
+            var json = await response.Content.ReadAsStringAsync();
+            return json;
+        }
+
+        public async Task<List<Livreur>> GetLivreurs()
+        {
+            var response = await _httpClient.GetAsync($"{BASE_URL}/pharmacien/livreurs");
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<List<Livreur>>(json);
+        }
+
+        public async Task<List<Medicament>> GetMedicaments()
+        {
+            var response = await _httpClient.GetAsync($"{BASE_URL}/pharmacien/medicaments");
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<List<Medicament>>(json);
+        }
+
+        public async Task<string> UpdateStock(int medicamentId, int quantiteStock)
+        {
+            var data = new { quantite_stock = quantiteStock };
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync($"{BASE_URL}/pharmacien/medicaments/{medicamentId}/stock", content);
+            var json = await response.Content.ReadAsStringAsync();
+            return json;
+        }
+
+        public async Task<string> ProposerMedicaments(int commandeId, List<object> medicaments)
+        {
+            var data = new { medicaments };
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync($"{BASE_URL}/pharmacien/commande/{commandeId}/proposer", content);
+            var json = await response.Content.ReadAsStringAsync();
+            return json;
+        }
+    }
+}
