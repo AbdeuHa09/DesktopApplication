@@ -33,7 +33,7 @@ namespace Pharmacien.Services
 
             var response = await _httpClient.PostAsync($"{BASE_URL}/pharmacien/login", content);
             var json = await response.Content.ReadAsStringAsync();
-
+            System.Windows.Forms.MessageBox.Show($"Status: {response.StatusCode}\n\nRéponse: {json}");
             return JsonConvert.DeserializeObject<LoginResponse>(json);
         }
 
