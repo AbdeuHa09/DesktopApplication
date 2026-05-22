@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Pharmacien.Models;
-using Pharmacien.Models;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -12,17 +11,17 @@ namespace Pharmacien.Services
     public class ApiService
     {
         private readonly HttpClient _httpClient;
-        private string _token;
         private const string BASE_URL = "http://localhost:8000/api";
 
         public ApiService()
         {
             _httpClient = new HttpClient();
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
         }
 
         public void SetToken(string token)
         {
-            _token = token;
             _httpClient.DefaultRequestHeaders.Remove("Authorization");
             _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
         }
@@ -31,8 +30,10 @@ namespace Pharmacien.Services
         {
             var data = new { email, password };
             var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+
             var response = await _httpClient.PostAsync($"{BASE_URL}/pharmacien/login", content);
             var json = await response.Content.ReadAsStringAsync();
+
             return JsonConvert.DeserializeObject<LoginResponse>(json);
         }
 
