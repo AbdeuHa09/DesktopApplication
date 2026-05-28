@@ -1,6 +1,5 @@
 ﻿namespace Pharmacien
 {
-  
     partial class LoginForm
     {
         private System.ComponentModel.IContainer components = null;
@@ -11,6 +10,8 @@
         private System.Windows.Forms.Label lblPassword;
         private System.Windows.Forms.TextBox txtPassword;
         private System.Windows.Forms.Button btnLogin;
+        private System.Windows.Forms.TableLayoutPanel tableLayout;
+        private System.Windows.Forms.Panel panelCenter;
 
         protected override void Dispose(bool disposing)
         {
@@ -21,94 +22,135 @@
 
         private void InitializeComponent()
         {
-            this.lblTitre = new System.Windows.Forms.Label();
-            this.lblSubtitle = new System.Windows.Forms.Label();
-            this.lblEmail = new System.Windows.Forms.Label();
-            this.txtEmail = new System.Windows.Forms.TextBox();
-            this.lblPassword = new System.Windows.Forms.Label();
-            this.txtPassword = new System.Windows.Forms.TextBox();
-            this.btnLogin = new System.Windows.Forms.Button();
-            this.SuspendLayout();
+            lblTitre = new System.Windows.Forms.Label();
+            lblSubtitle = new System.Windows.Forms.Label();
+            lblEmail = new System.Windows.Forms.Label();
+            txtEmail = new System.Windows.Forms.TextBox();
+            lblPassword = new System.Windows.Forms.Label();
+            txtPassword = new System.Windows.Forms.TextBox();
+            btnLogin = new System.Windows.Forms.Button();
+            tableLayout = new System.Windows.Forms.TableLayoutPanel();
+            panelCenter = new System.Windows.Forms.Panel();
+
+            tableLayout.SuspendLayout();
+            panelCenter.SuspendLayout();
+            SuspendLayout();
+
+            // tableLayout — occupe toute la fenêtre
+            tableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            tableLayout.ColumnCount = 3;
+            tableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            tableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            tableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            tableLayout.RowCount = 3;
+            tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            tableLayout.Controls.Add(panelCenter, 1, 1);
+
+            // panelCenter — contient tous les contrôles
+            panelCenter.Dock = System.Windows.Forms.DockStyle.Fill;
+            panelCenter.BackColor = System.Drawing.Color.White;
+            panelCenter.Controls.Add(btnLogin);
+            panelCenter.Controls.Add(txtPassword);
+            panelCenter.Controls.Add(lblPassword);
+            panelCenter.Controls.Add(txtEmail);
+            panelCenter.Controls.Add(lblEmail);
+            panelCenter.Controls.Add(lblSubtitle);
+            panelCenter.Controls.Add(lblTitre);
 
             // lblTitre
-            this.lblTitre.AutoSize = true;
-            this.lblTitre.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
-            this.lblTitre.ForeColor = System.Drawing.Color.FromArgb(11, 188, 105);
-            this.lblTitre.Location = new System.Drawing.Point(300, 30);
-            this.lblTitre.Name = "lblTitre";
-            this.lblTitre.Size = new System.Drawing.Size(215, 45);
-            this.lblTitre.TabIndex = 0;
-            this.lblTitre.Text = "PharmaConnect";
+            lblTitre.AutoSize = false;
+            lblTitre.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
+            lblTitre.ForeColor = System.Drawing.Color.FromArgb(11, 188, 105);
+            lblTitre.Dock = System.Windows.Forms.DockStyle.None;
+            lblTitre.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            lblTitre.Size = new System.Drawing.Size(500, 65);
+            lblTitre.Location = new System.Drawing.Point(0, 30);
+            lblTitre.Name = "lblTitre";
+            lblTitre.TabIndex = 0;
+            lblTitre.Text = "PharmaConnect";
+            lblTitre.Anchor = System.Windows.Forms.AnchorStyles.Top
+                            | System.Windows.Forms.AnchorStyles.Left
+                            | System.Windows.Forms.AnchorStyles.Right;
 
             // lblSubtitle
-            this.lblSubtitle.AutoSize = true;
-            this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.lblSubtitle.ForeColor = System.Drawing.Color.Gray;
-            this.lblSubtitle.Location = new System.Drawing.Point(350, 75);
-            this.lblSubtitle.Name = "lblSubtitle";
-            this.lblSubtitle.Size = new System.Drawing.Size(150, 21);
-            this.lblSubtitle.TabIndex = 1;
-            this.lblSubtitle.Text = "Connexion Pharmacien";
+            lblSubtitle.AutoSize = false;
+            lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 12F);
+            lblSubtitle.ForeColor = System.Drawing.Color.Gray;
+            lblSubtitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            lblSubtitle.Size = new System.Drawing.Size(500, 35);
+            lblSubtitle.Location = new System.Drawing.Point(0, 100);
+            lblSubtitle.Name = "lblSubtitle";
+            lblSubtitle.TabIndex = 1;
+            lblSubtitle.Text = "Connexion Pharmacien";
+            lblSubtitle.Anchor = System.Windows.Forms.AnchorStyles.Top
+                               | System.Windows.Forms.AnchorStyles.Left
+                               | System.Windows.Forms.AnchorStyles.Right;
 
             // lblEmail
-            this.lblEmail.AutoSize = true;
-            this.lblEmail.Location = new System.Drawing.Point(250, 130);
-            this.lblEmail.Name = "lblEmail";
-            this.lblEmail.Size = new System.Drawing.Size(41, 15);
-            this.lblEmail.TabIndex = 2;
-            this.lblEmail.Text = "Email :";
+            lblEmail.AutoSize = true;
+            lblEmail.Location = new System.Drawing.Point(0, 170);
+            lblEmail.Name = "lblEmail";
+            lblEmail.TabIndex = 2;
+            lblEmail.Text = "Email :";
 
             // txtEmail
-            this.txtEmail.Location = new System.Drawing.Point(250, 150);
-            this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(350, 23);
-            this.txtEmail.TabIndex = 3;
+            txtEmail.Location = new System.Drawing.Point(0, 200);
+            txtEmail.Name = "txtEmail";
+            txtEmail.Size = new System.Drawing.Size(500, 31);
+            txtEmail.TabIndex = 3;
+            txtEmail.Anchor = System.Windows.Forms.AnchorStyles.Top
+                            | System.Windows.Forms.AnchorStyles.Left
+                            | System.Windows.Forms.AnchorStyles.Right;
 
             // lblPassword
-            this.lblPassword.AutoSize = true;
-            this.lblPassword.Location = new System.Drawing.Point(250, 190);
-            this.lblPassword.Name = "lblPassword";
-            this.lblPassword.Size = new System.Drawing.Size(76, 15);
-            this.lblPassword.TabIndex = 4;
-            this.lblPassword.Text = "Mot de passe :";
+            lblPassword.AutoSize = true;
+            lblPassword.Location = new System.Drawing.Point(0, 255);
+            lblPassword.Name = "lblPassword";
+            lblPassword.TabIndex = 4;
+            lblPassword.Text = "Mot de passe :";
 
             // txtPassword
-            this.txtPassword.Location = new System.Drawing.Point(250, 210);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(350, 23);
-            this.txtPassword.TabIndex = 5;
+            txtPassword.Location = new System.Drawing.Point(0, 285);
+            txtPassword.Name = "txtPassword";
+            txtPassword.PasswordChar = '*';
+            txtPassword.Size = new System.Drawing.Size(500, 31);
+            txtPassword.TabIndex = 5;
+            txtPassword.Anchor = System.Windows.Forms.AnchorStyles.Top
+                               | System.Windows.Forms.AnchorStyles.Left
+                               | System.Windows.Forms.AnchorStyles.Right;
 
             // btnLogin
-            this.btnLogin.BackColor = System.Drawing.Color.FromArgb(11, 188, 105);
-            this.btnLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLogin.ForeColor = System.Drawing.Color.White;
-            this.btnLogin.Location = new System.Drawing.Point(250, 270);
-            this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(350, 45);
-            this.btnLogin.TabIndex = 6;
-            this.btnLogin.Text = "SE CONNECTER";
-            this.btnLogin.UseVisualStyleBackColor = false;
-            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
+            btnLogin.BackColor = System.Drawing.Color.FromArgb(11, 188, 105);
+            btnLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            btnLogin.ForeColor = System.Drawing.Color.White;
+            btnLogin.Location = new System.Drawing.Point(0, 360);
+            btnLogin.Name = "btnLogin";
+            btnLogin.Size = new System.Drawing.Size(500, 55);
+            btnLogin.TabIndex = 6;
+            btnLogin.Text = "SE CONNECTER";
+            btnLogin.UseVisualStyleBackColor = false;
+            btnLogin.Click += btnLogin_Click;
+            btnLogin.Anchor = System.Windows.Forms.AnchorStyles.Top
+                            | System.Windows.Forms.AnchorStyles.Left
+                            | System.Windows.Forms.AnchorStyles.Right;
 
             // LoginForm
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(850, 550);
-            this.Controls.Add(this.btnLogin);
-            this.Controls.Add(this.txtPassword);
-            this.Controls.Add(this.lblPassword);
-            this.Controls.Add(this.txtEmail);
-            this.Controls.Add(this.lblEmail);
-            this.Controls.Add(this.lblSubtitle);
-            this.Controls.Add(this.lblTitre);
-            this.Name = "LoginForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "PharmaConnect - Pharmacien";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            BackColor = System.Drawing.Color.WhiteSmoke;
+            ClientSize = new System.Drawing.Size(900, 600);
+            MinimumSize = new System.Drawing.Size(600, 500);
+            Controls.Add(tableLayout);
+            Name = "LoginForm";
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            Text = "PharmaConnect - Pharmacien";
+
+            tableLayout.ResumeLayout(false);
+            panelCenter.ResumeLayout(false);
+            panelCenter.PerformLayout();
+            ResumeLayout(false);
         }
     }
-
 }

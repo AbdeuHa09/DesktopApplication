@@ -8,6 +8,13 @@ using System.Threading.Tasks;
 
 namespace Pharmacien.Services
 {
+    // Classe wrapper générique pour toutes les réponses API
+    public class ApiResponse<T>
+    {
+        public string message { get; set; }
+        public T data { get; set; }
+    }
+
     public class ApiService
     {
         private readonly HttpClient _httpClient;
@@ -33,7 +40,6 @@ namespace Pharmacien.Services
 
             var response = await _httpClient.PostAsync($"{BASE_URL}/pharmacien/login", content);
             var json = await response.Content.ReadAsStringAsync();
-            System.Windows.Forms.MessageBox.Show($"Status: {response.StatusCode}\n\nRéponse: {json}");
             return JsonConvert.DeserializeObject<LoginResponse>(json);
         }
 
@@ -41,14 +47,15 @@ namespace Pharmacien.Services
         {
             var response = await _httpClient.GetAsync($"{BASE_URL}/pharmacien/commandes");
             var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<List<Commande>>(json);
+            return JsonConvert.DeserializeObject<List<Commande>>(json) ?? new List<Commande>();
         }
 
         public async Task<Commande> GetCommande(int id)
         {
             var response = await _httpClient.GetAsync($"{BASE_URL}/pharmacien/commande/{id}");
             var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<Commande>(json);
+            var result = JsonConvert.DeserializeObject<ApiResponse<Commande>>(json);
+            return result?.data;
         }
 
         public async Task<string> ValiderCommande(int commandeId, int livreurId)
@@ -73,14 +80,16 @@ namespace Pharmacien.Services
         {
             var response = await _httpClient.GetAsync($"{BASE_URL}/pharmacien/livreurs");
             var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<List<Livreur>>(json);
+            var result = JsonConvert.DeserializeObject<ApiResponse<List<Livreur>>>(json);
+            return result?.data ?? new List<Livreur>();
         }
 
         public async Task<List<Medicament>> GetMedicaments()
         {
             var response = await _httpClient.GetAsync($"{BASE_URL}/pharmacien/medicaments");
             var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<List<Medicament>>(json);
+            var result = JsonConvert.DeserializeObject<ApiResponse<List<Medicament>>>(json);
+            return result?.data ?? new List<Medicament>();
         }
 
         public async Task<string> UpdateStock(int medicamentId, int quantiteStock)

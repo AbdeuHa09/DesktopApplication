@@ -15,13 +15,6 @@ namespace Pharmacien
             _apiService = new ApiService();
         }
 
-        private void LoginForm_Load(object sender, EventArgs e)
-        {
-            // Optionnel : pré-remplir pour le test
-            // txtEmail.Text = "pharmacie@test.com";
-            // txtPassword.Text = "password";
-        }
-
         private async void btnLogin_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtEmail.Text) || string.IsNullOrEmpty(txtPassword.Text))
@@ -41,11 +34,11 @@ namespace Pharmacien
                 if (response.success)
                 {
                     _apiService.SetToken(response.token);
-
                     MessageBox.Show($"Bienvenue {response.user.prenom} {response.user.name} !",
                         "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // TODO: Ouvrir DashboardForm
+                    DashboardForm dashboard = new DashboardForm(_apiService, response.user);
+                    dashboard.Show();
                     this.Hide();
                 }
                 else
