@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Pharmacien.Models
+﻿namespace Pharmacien.Models
 {
     public class LoginResponse
     {

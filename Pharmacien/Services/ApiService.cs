@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Pharmacien.Models;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace Pharmacien.Services
     public class ApiService
     {
         private readonly HttpClient _httpClient;
+        private readonly JsonSerializerSettings _jsonSettings;
         private const string BASE_URL = "http://localhost:8000/api";
 
         public ApiService()
@@ -25,6 +27,17 @@ namespace Pharmacien.Services
             _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+
+            // Configuration pour snake_case (format Laravel)
+            _jsonSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy()
+                },
+                NullValueHandling = NullValueHandling.Ignore,
+                MissingMemberHandling = MissingMemberHandling.Ignore
+            };
         }
 
         public void SetToken(string token)
@@ -40,22 +53,26 @@ namespace Pharmacien.Services
 
             var response = await _httpClient.PostAsync($"{BASE_URL}/pharmacien/login", content);
             var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<LoginResponse>(json);
+            return JsonConvert.DeserializeObject<LoginResponse>(json, _jsonSettings);
         }
 
         public async Task<List<Commande>> GetCommandes()
         {
             var response = await _httpClient.GetAsync($"{BASE_URL}/pharmacien/commandes");
             var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<List<Commande>>(json) ?? new List<Commande>();
+            return JsonConvert.DeserializeObject<List<Commande>>(json, _jsonSettings) ?? new List<Commande>();
         }
 
         public async Task<Commande> GetCommande(int id)
         {
             var response = await _httpClient.GetAsync($"{BASE_URL}/pharmacien/commande/{id}");
             var json = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<ApiResponse<Commande>>(json);
-            return result?.data;
+
+            // Désérialiser l'objet wrapper
+            var wrapper = JsonConvert.DeserializeObject<ApiResponse<Commande>>(json, _jsonSettings);
+
+            // Retourner le data
+            return wrapper?.data;
         }
 
         public async Task<string> ValiderCommande(int commandeId, int livreurId)
@@ -80,16 +97,14 @@ namespace Pharmacien.Services
         {
             var response = await _httpClient.GetAsync($"{BASE_URL}/pharmacien/livreurs");
             var json = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<ApiResponse<List<Livreur>>>(json);
-            return result?.data ?? new List<Livreur>();
+            return JsonConvert.DeserializeObject<List<Livreur>>(json, _jsonSettings) ?? new List<Livreur>();
         }
 
         public async Task<List<Medicament>> GetMedicaments()
         {
             var response = await _httpClient.GetAsync($"{BASE_URL}/pharmacien/medicaments");
             var json = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<ApiResponse<List<Medicament>>>(json);
-            return result?.data ?? new List<Medicament>();
+            return JsonConvert.DeserializeObject<List<Medicament>>(json, _jsonSettings) ?? new List<Medicament>();
         }
 
         public async Task<string> UpdateStock(int medicamentId, int quantiteStock)

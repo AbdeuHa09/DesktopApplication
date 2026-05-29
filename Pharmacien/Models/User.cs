@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Pharmacien.Models
+﻿namespace Pharmacien.Models
 {
     public class User
     {
@@ -12,5 +8,6 @@ namespace Pharmacien.Models
         public string email { get; set; }
         public string tel { get; set; }
         public string role { get; set; }
+        public string adresse { get; set; }
     }
 }

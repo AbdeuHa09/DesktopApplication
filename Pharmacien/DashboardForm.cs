@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Pharmacien.Services;
 using Pharmacien.Models;
+using System.Threading.Tasks;
 
 namespace Pharmacien
 {
@@ -19,11 +20,12 @@ namespace Pharmacien
             _apiService = apiService;
             _user = user;
             this.Text = $"Dashboard - {_user.prenom} {_user.name}";
+            dgvCommandes.CellDoubleClick += dgvCommandes_CellDoubleClick;
             LoadCommandes();
             LoadStats();
         }
 
-        private async void LoadCommandes()
+        private async Task LoadCommandes()
         {
             try
             {
@@ -31,6 +33,13 @@ namespace Pharmacien
                 dgvCommandes.DataSource = null;
                 dgvCommandes.DataSource = _commandes;
 
+                // ✅ Masquer les colonnes objets complexes
+                string[] colonnesAMasquer = { "client", "livraison", "ligne_medicaments", "ordonnance", "pharmacien" };
+                foreach (var col in colonnesAMasquer)
+                    if (dgvCommandes.Columns.Contains(col))
+                        dgvCommandes.Columns[col].Visible = false;
+
+                // ✅ Renommer les colonnes utiles
                 if (dgvCommandes.Columns.Contains("id"))
                     dgvCommandes.Columns["id"].HeaderText = "N°";
                 if (dgvCommandes.Columns.Contains("date_commande"))
@@ -46,7 +55,7 @@ namespace Pharmacien
             }
         }
 
-        private async void LoadStats()
+        private async Task LoadStats()
         {
             try
             {
@@ -62,10 +71,28 @@ namespace Pharmacien
             }
         }
 
-        private void btnActualiser_Click(object sender, EventArgs e)
+        private async void dgvCommandes_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            LoadCommandes();
-            LoadStats();
+            if (e.RowIndex >= 0)
+            {
+                // ✅ Récupérer directement depuis le DataGrid, pas depuis _commandes
+                var commande = dgvCommandes.Rows[e.RowIndex].DataBoundItem as Commande;
+                if (commande == null) return;
+
+                DetailCommandeForm detailForm = new DetailCommandeForm(_apiService, commande);
+                var result = detailForm.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    await LoadCommandes();
+                    await LoadStats();
+                }
+            }
+        }
+
+        private async void btnActualiser_Click(object sender, EventArgs e)
+        {
+            await LoadCommandes();
+            await LoadStats();
         }
 
         private void btnDeconnexion_Click(object sender, EventArgs e)
