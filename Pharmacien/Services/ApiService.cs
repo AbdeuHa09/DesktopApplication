@@ -60,6 +60,7 @@ namespace Pharmacien.Services
         {
             var response = await _httpClient.GetAsync($"{BASE_URL}/pharmacien/commandes");
             var json = await response.Content.ReadAsStringAsync();
+            
             return JsonConvert.DeserializeObject<List<Commande>>(json, _jsonSettings) ?? new List<Commande>();
         }
 
@@ -102,6 +103,7 @@ namespace Pharmacien.Services
 
         public async Task<List<Medicament>> GetMedicaments()
         {
+
             var response = await _httpClient.GetAsync($"{BASE_URL}/pharmacien/medicaments");
             var json = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<List<Medicament>>(json, _jsonSettings) ?? new List<Medicament>();
@@ -123,6 +125,12 @@ namespace Pharmacien.Services
             var response = await _httpClient.PostAsync($"{BASE_URL}/pharmacien/commande/{commandeId}/proposer", content);
             var json = await response.Content.ReadAsStringAsync();
             return json;
+        }
+        public async Task<bool> AjouterMedicament(Medicament medicament)
+        {
+            var content = new StringContent(JsonConvert.SerializeObject(medicament), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync($"{BASE_URL}/pharmacien/medicaments", content);
+            return response.IsSuccessStatusCode;
         }
     }
 }

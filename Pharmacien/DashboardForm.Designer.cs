@@ -20,107 +20,129 @@
 
         private void InitializeComponent()
         {
-            this.dgvCommandes = new System.Windows.Forms.DataGridView();
-            this.lblTotal = new System.Windows.Forms.Label();
-            this.lblEnAttente = new System.Windows.Forms.Label();
-            this.lblValidees = new System.Windows.Forms.Label();
-            this.lblLivrees = new System.Windows.Forms.Label();
-            this.btnActualiser = new System.Windows.Forms.Button();
-            this.btnDeconnexion = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCommandes)).BeginInit();
-            this.SuspendLayout();
-
-            // lblTotal
-            this.lblTotal.AutoSize = true;
-            this.lblTotal.Location = new System.Drawing.Point(12, 20);
-            this.lblTotal.Name = "lblTotal";
-            this.lblTotal.TabIndex = 1;
-            this.lblTotal.Text = "Total: 0";
-            this.lblTotal.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
-
-            // lblEnAttente
-            this.lblEnAttente.AutoSize = true;
-            this.lblEnAttente.Location = new System.Drawing.Point(12, 50);
-            this.lblEnAttente.Name = "lblEnAttente";
-            this.lblEnAttente.TabIndex = 2;
-            this.lblEnAttente.Text = "En attente: 0";
-            this.lblEnAttente.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
-
-            // lblValidees
-            this.lblValidees.AutoSize = true;
-            this.lblValidees.Location = new System.Drawing.Point(12, 80);
-            this.lblValidees.Name = "lblValidees";
-            this.lblValidees.TabIndex = 3;
-            this.lblValidees.Text = "Validées: 0";
-            this.lblValidees.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
-
-            // lblLivrees
-            this.lblLivrees.AutoSize = true;
-            this.lblLivrees.Location = new System.Drawing.Point(12, 110);
-            this.lblLivrees.Name = "lblLivrees";
-            this.lblLivrees.TabIndex = 4;
-            this.lblLivrees.Text = "Livrées: 0";
-            this.lblLivrees.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left;
-
+            dgvCommandes = new DataGridView();
+            lblTotal = new Label();
+            lblEnAttente = new Label();
+            lblValidees = new Label();
+            lblLivrees = new Label();
+            btnActualiser = new Button();
+            btnDeconnexion = new Button();
+            btnGestionStock = new Button();
+            ((System.ComponentModel.ISupportInitialize)dgvCommandes).BeginInit();
+            SuspendLayout();
+            // 
             // dgvCommandes
-            this.dgvCommandes.AllowUserToAddRows = false;
-            this.dgvCommandes.AllowUserToDeleteRows = false;
-            this.dgvCommandes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvCommandes.Location = new System.Drawing.Point(12, 140);
-            this.dgvCommandes.Name = "dgvCommandes";
-            this.dgvCommandes.ReadOnly = true;
-            this.dgvCommandes.RowHeadersWidth = 51;
-            this.dgvCommandes.RowTemplate.Height = 29;
-            this.dgvCommandes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvCommandes.Size = new System.Drawing.Size(760, 300);
-            this.dgvCommandes.TabIndex = 0;
-            // S'étire dans toutes les directions sauf le bas (laisse place aux boutons)
-            this.dgvCommandes.Anchor = System.Windows.Forms.AnchorStyles.Top
-                                     | System.Windows.Forms.AnchorStyles.Bottom
-                                     | System.Windows.Forms.AnchorStyles.Left
-                                     | System.Windows.Forms.AnchorStyles.Right;
-
+            // 
+            dgvCommandes.AllowUserToAddRows = false;
+            dgvCommandes.AllowUserToDeleteRows = false;
+            dgvCommandes.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvCommandes.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvCommandes.Location = new Point(9, 109);
+            dgvCommandes.Margin = new Padding(3, 2, 3, 2);
+            dgvCommandes.Name = "dgvCommandes";
+            dgvCommandes.ReadOnly = true;
+            dgvCommandes.RowHeadersWidth = 51;
+            dgvCommandes.RowTemplate.Height = 29;
+            dgvCommandes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvCommandes.Size = new Size(875, 225);
+            dgvCommandes.TabIndex = 0;
+            // 
+            // lblTotal
+            // 
+            lblTotal.AutoSize = true;
+            lblTotal.Location = new Point(10, 15);
+            lblTotal.Name = "lblTotal";
+            lblTotal.Size = new Size(44, 15);
+            lblTotal.TabIndex = 1;
+            lblTotal.Text = "Total: 0";
+            // 
+            // lblEnAttente
+            // 
+            lblEnAttente.AutoSize = true;
+            lblEnAttente.Location = new Point(10, 38);
+            lblEnAttente.Name = "lblEnAttente";
+            lblEnAttente.Size = new Size(72, 15);
+            lblEnAttente.TabIndex = 2;
+            lblEnAttente.Text = "En attente: 0";
+            // 
+            // lblValidees
+            // 
+            lblValidees.AutoSize = true;
+            lblValidees.Location = new Point(10, 60);
+            lblValidees.Name = "lblValidees";
+            lblValidees.Size = new Size(61, 15);
+            lblValidees.TabIndex = 3;
+            lblValidees.Text = "Validées: 0";
+            // 
+            // lblLivrees
+            // 
+            lblLivrees.AutoSize = true;
+            lblLivrees.Location = new Point(10, 82);
+            lblLivrees.Name = "lblLivrees";
+            lblLivrees.Size = new Size(55, 15);
+            lblLivrees.TabIndex = 4;
+            lblLivrees.Text = "Livrées: 0";
+            // 
             // btnActualiser
-            this.btnActualiser.Location = new System.Drawing.Point(12, 450);
-            this.btnActualiser.Name = "btnActualiser";
-            this.btnActualiser.Size = new System.Drawing.Size(120, 35);
-            this.btnActualiser.TabIndex = 5;
-            this.btnActualiser.Text = "Actualiser";
-            this.btnActualiser.UseVisualStyleBackColor = true;
-            this.btnActualiser.Click += new System.EventHandler(this.btnActualiser_Click);
-            // Reste collé en bas à gauche
-            this.btnActualiser.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
-
+            // 
+            btnActualiser.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnActualiser.Location = new Point(10, 338);
+            btnActualiser.Margin = new Padding(3, 2, 3, 2);
+            btnActualiser.Name = "btnActualiser";
+            btnActualiser.Size = new Size(105, 26);
+            btnActualiser.TabIndex = 5;
+            btnActualiser.Text = "Actualiser";
+            btnActualiser.UseVisualStyleBackColor = true;
+            btnActualiser.Click += btnActualiser_Click;
+            // 
             // btnDeconnexion
-            this.btnDeconnexion.Location = new System.Drawing.Point(652, 450);
-            this.btnDeconnexion.Name = "btnDeconnexion";
-            this.btnDeconnexion.Size = new System.Drawing.Size(120, 35);
-            this.btnDeconnexion.TabIndex = 6;
-            this.btnDeconnexion.Text = "Déconnexion";
-            this.btnDeconnexion.UseVisualStyleBackColor = true;
-            this.btnDeconnexion.Click += new System.EventHandler(this.btnDeconnexion_Click);
-            // Reste collé en bas à droite
-            this.btnDeconnexion.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right;
-
+            // 
+            btnDeconnexion.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnDeconnexion.Location = new Point(780, 338);
+            btnDeconnexion.Margin = new Padding(3, 2, 3, 2);
+            btnDeconnexion.Name = "btnDeconnexion";
+            btnDeconnexion.Size = new Size(105, 26);
+            btnDeconnexion.TabIndex = 6;
+            btnDeconnexion.Text = "Déconnexion";
+            btnDeconnexion.UseVisualStyleBackColor = true;
+            btnDeconnexion.Click += btnDeconnexion_Click;
+            // 
+            // btnGestionStock
+            // 
+            btnGestionStock.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnGestionStock.Location = new Point(401, 338);
+            btnGestionStock.Margin = new Padding(3, 2, 3, 2);
+            btnGestionStock.Name = "btnGestionStock";
+            btnGestionStock.Size = new Size(105, 26);
+            btnGestionStock.TabIndex = 7;
+            btnGestionStock.Text = "Gestion Stock";
+            btnGestionStock.UseVisualStyleBackColor = true;
+            btnGestionStock.Click += btnGestionStock_Click;
+            // 
             // DashboardForm
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 500);
-            this.MinimumSize = new System.Drawing.Size(600, 400);
-            this.Controls.Add(this.btnDeconnexion);
-            this.Controls.Add(this.btnActualiser);
-            this.Controls.Add(this.lblLivrees);
-            this.Controls.Add(this.lblValidees);
-            this.Controls.Add(this.lblEnAttente);
-            this.Controls.Add(this.lblTotal);
-            this.Controls.Add(this.dgvCommandes);
-            this.Name = "DashboardForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Dashboard - Pharmacien";
-            this.Load += new System.EventHandler(this.DashboardForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCommandes)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(896, 375);
+            Controls.Add(btnGestionStock);
+            Controls.Add(btnDeconnexion);
+            Controls.Add(btnActualiser);
+            Controls.Add(lblLivrees);
+            Controls.Add(lblValidees);
+            Controls.Add(lblEnAttente);
+            Controls.Add(lblTotal);
+            Controls.Add(dgvCommandes);
+            Margin = new Padding(3, 2, 3, 2);
+            MinimumSize = new Size(527, 310);
+            Name = "DashboardForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Dashboard - Pharmacien";
+            Load += DashboardForm_Load;
+            ((System.ComponentModel.ISupportInitialize)dgvCommandes).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
+
+        private Button btnGestionStock;
     }
 }

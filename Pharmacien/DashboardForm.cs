@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Pharmacien.Forms;
+using Pharmacien.Models;
+using Pharmacien.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
-using Pharmacien.Services;
-using Pharmacien.Models;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+
 
 namespace Pharmacien
 {
@@ -17,10 +19,14 @@ namespace Pharmacien
         public DashboardForm(ApiService apiService, User user)
         {
             InitializeComponent();
+            Button btnGestionStock = new Button();
+            btnGestionStock.Text = "📦 Gestion Stock";
+            btnGestionStock.Location = new Point(150, 460);
+            btnGestionStock.Size = new Size(150, 35);
+            btnGestionStock.Click += (s, e) => new GestionStockForm(_apiService).ShowDialog();
+            this.Controls.Add(btnGestionStock);
             _apiService = apiService;
             _user = user;
-            this.Text = $"Dashboard - {_user.prenom} {_user.name}";
-            dgvCommandes.CellDoubleClick += dgvCommandes_CellDoubleClick;
             LoadCommandes();
             LoadStats();
         }
@@ -105,6 +111,12 @@ namespace Pharmacien
         private void DashboardForm_Load(object sender, EventArgs e)
         {
             // Déjà géré dans le constructeur
+        }
+
+        private void btnGestionStock_Click(object sender, EventArgs e)
+        {
+            GestionStockForm stockForm = new GestionStockForm(_apiService);
+            stockForm.ShowDialog();
         }
     }
 }
