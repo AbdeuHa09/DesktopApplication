@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.IO;  // ← AJOUTER CETTE LIGNE
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
@@ -29,9 +30,9 @@ namespace Pharmacien
         {
             try
             {
+                
                 var commandeDetail = await _apiService.GetCommande(_commande.id);
                 _commande = commandeDetail;
-
                 lblNumero.Text = $"#{_commande.id}";
                 lblDate.Text = _commande.date_commande.ToString("dd/MM/yyyy HH:mm");
                 lblStatut.Text = GetStatutTexte(_commande.statut);
@@ -45,6 +46,9 @@ namespace Pharmacien
                     _ => _commande.type_commande
                 };
                 lblType.Text = typeTexte;
+
+                // ✅ Afficher le bouton ordonnance seulement si nécessaire
+                btnVoirOrdonnance.Visible = (_commande.type_commande == "ordonnance" && _commande.ordonnance != null);
 
                 if (_commande.client != null)
                 {
@@ -77,6 +81,17 @@ namespace Pharmacien
                     lblJustification.Visible = true;
                     txtJustification.Visible = true;
                     txtJustification.Text = _commande.livraison.justification ?? "Aucune justification";
+                }
+                // Afficher les symptômes si la commande est de type symptômes
+                if (_commande.type_commande == "symptomes")
+                {
+                    lblSymptomes.Visible = true;
+                    txtSymptomes.Visible = true;
+                    txtSymptomes.Text = _commande.symptome.description;
+
+                    lblAllergies.Visible = true;
+                    txtAllergies.Visible = true;
+                    txtAllergies.Text = _commande.symptome.allergies ?? "Aucune allergie signalée";
                 }
             }
             catch (Exception ex)
@@ -163,6 +178,47 @@ namespace Pharmacien
             }
         }
 
+        private async void btnVoirOrdonnance_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_commande.ordonnance == null)
+                {
+                    MessageBox.Show("Aucune ordonnance associée à cette commande.", "Information",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                var fileData = await _apiService.DownloadOrdonnance(_commande.ordonnance.id);
+
+                if (fileData == null)
+                {
+                    MessageBox.Show("Impossible de télécharger l'ordonnance.", "Erreur",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                string tempFile = Path.GetTempFileName();
+                string ext = Path.GetExtension(_commande.ordonnance.fichier);
+                if (string.IsNullOrEmpty(ext)) ext = ".pdf";
+
+                string finalFile = tempFile + ext;
+                File.Move(tempFile, finalFile);
+                File.WriteAllBytes(finalFile, fileData);
+
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = finalFile,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur: {ex.Message}", "Erreur",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private string GetStatutTexte(string statut)
         {
             return statut switch
@@ -188,9 +244,25 @@ namespace Pharmacien
                 _ => Color.White
             };
         }
-
+        private void btnProposerMedicaments_Click(object sender, EventArgs e)
+        {
+            ProposerMedicamentsForm proposerForm = new ProposerMedicamentsForm(_apiService, _commande);
+            var result = proposerForm.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                MessageBox.Show("Proposition envoyée au client !", "Succès",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+        }
         private void DetailCommandeForm_Load(object sender, EventArgs e)
         {
+        }
+
+        private void txtAllergies_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -3,10 +3,10 @@ using Pharmacien.Models;
 using Pharmacien.Services;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 
 namespace Pharmacien
 {
@@ -19,12 +19,15 @@ namespace Pharmacien
         public DashboardForm(ApiService apiService, User user)
         {
             InitializeComponent();
+            dgvCommandes.CellDoubleClick += dgvCommandes_CellDoubleClick;
+
             Button btnGestionStock = new Button();
             btnGestionStock.Text = "📦 Gestion Stock";
             btnGestionStock.Location = new Point(150, 460);
             btnGestionStock.Size = new Size(150, 35);
             btnGestionStock.Click += (s, e) => new GestionStockForm(_apiService).ShowDialog();
             this.Controls.Add(btnGestionStock);
+
             _apiService = apiService;
             _user = user;
             LoadCommandes();
@@ -39,13 +42,11 @@ namespace Pharmacien
                 dgvCommandes.DataSource = null;
                 dgvCommandes.DataSource = _commandes;
 
-                // ✅ Masquer les colonnes objets complexes
                 string[] colonnesAMasquer = { "client", "livraison", "ligne_medicaments", "ordonnance", "pharmacien" };
                 foreach (var col in colonnesAMasquer)
                     if (dgvCommandes.Columns.Contains(col))
                         dgvCommandes.Columns[col].Visible = false;
 
-                // ✅ Renommer les colonnes utiles
                 if (dgvCommandes.Columns.Contains("id"))
                     dgvCommandes.Columns["id"].HeaderText = "N°";
                 if (dgvCommandes.Columns.Contains("date_commande"))
@@ -81,7 +82,6 @@ namespace Pharmacien
         {
             if (e.RowIndex >= 0)
             {
-                // ✅ Récupérer directement depuis le DataGrid, pas depuis _commandes
                 var commande = dgvCommandes.Rows[e.RowIndex].DataBoundItem as Commande;
                 if (commande == null) return;
 
@@ -110,7 +110,6 @@ namespace Pharmacien
 
         private void DashboardForm_Load(object sender, EventArgs e)
         {
-            // Déjà géré dans le constructeur
         }
 
         private void btnGestionStock_Click(object sender, EventArgs e)

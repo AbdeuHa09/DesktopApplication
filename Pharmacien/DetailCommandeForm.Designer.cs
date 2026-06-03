@@ -18,6 +18,14 @@
         private System.Windows.Forms.Button btnRefuser;
         private System.Windows.Forms.Label lblJustification;
         private System.Windows.Forms.TextBox txtJustification;
+        private System.Windows.Forms.Button btnVoirOrdonnance;
+
+        // Nouveaux contrôles pour les symptômes
+        private System.Windows.Forms.Label lblSymptomes;
+        private System.Windows.Forms.TextBox txtSymptomes;
+        private System.Windows.Forms.Label lblAllergies;
+        private System.Windows.Forms.TextBox txtAllergies;
+        private System.Windows.Forms.Button btnProposerMedicaments;
 
         protected override void Dispose(bool disposing)
         {
@@ -43,6 +51,12 @@
             btnRefuser = new Button();
             lblJustification = new Label();
             txtJustification = new TextBox();
+            btnVoirOrdonnance = new Button();
+            lblSymptomes = new Label();
+            txtSymptomes = new TextBox();
+            lblAllergies = new Label();
+            txtAllergies = new TextBox();
+            btnProposerMedicaments = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvMedicaments).BeginInit();
             SuspendLayout();
             // 
@@ -147,25 +161,25 @@
             // 
             btnValider.BackColor = Color.Green;
             btnValider.ForeColor = Color.White;
-            btnValider.Location = new Point(20, 360);
+            btnValider.Location = new Point(20, 359);
             btnValider.Name = "btnValider";
             btnValider.Size = new Size(120, 40);
             btnValider.TabIndex = 11;
             btnValider.Text = "✓ Valider";
             btnValider.UseVisualStyleBackColor = false;
-            btnValider.Click += btnValider_Click;  // ← AJOUTÉ
+            btnValider.Click += btnValider_Click;
             // 
             // btnRefuser
             // 
             btnRefuser.BackColor = Color.Red;
             btnRefuser.ForeColor = Color.White;
-            btnRefuser.Location = new Point(150, 360);
+            btnRefuser.Location = new Point(177, 358);
             btnRefuser.Name = "btnRefuser";
             btnRefuser.Size = new Size(120, 40);
             btnRefuser.TabIndex = 12;
             btnRefuser.Text = "✗ Refuser";
             btnRefuser.UseVisualStyleBackColor = false;
-            btnRefuser.Click += btnRefuser_Click;  // ← AJOUTÉ
+            btnRefuser.Click += btnRefuser_Click;
             // 
             // lblJustification
             // 
@@ -187,9 +201,83 @@
             txtJustification.TabIndex = 14;
             txtJustification.Visible = false;
             // 
+            // btnVoirOrdonnance
+            // 
+            btnVoirOrdonnance.BackColor = Color.FromArgb(59, 130, 246);
+            btnVoirOrdonnance.ForeColor = Color.White;
+            btnVoirOrdonnance.Location = new Point(350, 360);
+            btnVoirOrdonnance.Name = "btnVoirOrdonnance";
+            btnVoirOrdonnance.Size = new Size(150, 40);
+            btnVoirOrdonnance.TabIndex = 15;
+            btnVoirOrdonnance.Text = "📄 Voir ordonnance";
+            btnVoirOrdonnance.UseVisualStyleBackColor = false;
+            btnVoirOrdonnance.Visible = false;
+            btnVoirOrdonnance.Click += btnVoirOrdonnance_Click;
+            // 
+            // lblSymptomes
+            // 
+            lblSymptomes.AutoSize = true;
+            lblSymptomes.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblSymptomes.Location = new Point(20, 270);
+            lblSymptomes.Name = "lblSymptomes";
+            lblSymptomes.Size = new Size(133, 28);
+            lblSymptomes.TabIndex = 16;
+            lblSymptomes.Text = "Symptômes :";
+            lblSymptomes.Visible = false;
+            // 
+            // txtSymptomes
+            // 
+            txtSymptomes.Location = new Point(20, 300);
+            txtSymptomes.Multiline = true;
+            txtSymptomes.Name = "txtSymptomes";
+            txtSymptomes.ReadOnly = true;
+            txtSymptomes.Size = new Size(300, 60);
+            txtSymptomes.TabIndex = 17;
+            txtSymptomes.Visible = false;
+            // 
+            // lblAllergies
+            // 
+            lblAllergies.AutoSize = true;
+            lblAllergies.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblAllergies.Location = new Point(20, 370);
+            lblAllergies.Name = "lblAllergies";
+            lblAllergies.Size = new Size(106, 28);
+            lblAllergies.TabIndex = 18;
+            lblAllergies.Text = "Allergies :";
+            lblAllergies.Visible = false;
+            // 
+            // txtAllergies
+            // 
+            txtAllergies.Location = new Point(20, 400);
+            txtAllergies.Multiline = true;
+            txtAllergies.Name = "txtAllergies";
+            txtAllergies.ReadOnly = true;
+            txtAllergies.Size = new Size(300, 50);
+            txtAllergies.TabIndex = 19;
+            txtAllergies.Visible = false;
+            // 
+            // btnProposerMedicaments
+            // 
+            btnProposerMedicaments.BackColor = Color.FromArgb(139, 92, 246);
+            btnProposerMedicaments.ForeColor = Color.White;
+            btnProposerMedicaments.Location = new Point(350, 410);
+            btnProposerMedicaments.Name = "btnProposerMedicaments";
+            btnProposerMedicaments.Size = new Size(150, 40);
+            btnProposerMedicaments.TabIndex = 20;
+            btnProposerMedicaments.Text = "💊 Proposer médicaments";
+            btnProposerMedicaments.UseVisualStyleBackColor = false;
+            btnProposerMedicaments.Visible = false;
+            btnProposerMedicaments.Click += btnProposerMedicaments_Click;
+            // 
             // DetailCommandeForm
             // 
             ClientSize = new Size(800, 550);
+            Controls.Add(btnProposerMedicaments);
+            Controls.Add(txtAllergies);
+            Controls.Add(lblAllergies);
+            Controls.Add(txtSymptomes);
+            Controls.Add(lblSymptomes);
+            Controls.Add(btnVoirOrdonnance);
             Controls.Add(lblNumero);
             Controls.Add(lblDate);
             Controls.Add(lblStatut);

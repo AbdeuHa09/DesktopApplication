@@ -119,5 +119,11 @@ namespace Pharmacien.Models
 
         [JsonProperty("ligne_medicaments")]
         public List<LigneMedicament> ligne_medicaments { get; set; }
+
+        [JsonProperty("ordonnance")]
+        public Ordonnance ordonnance { get; set; }
+
+        [JsonProperty("symptome")]
+        public Symptome symptome { get; set; }
     }
 }
