@@ -30,9 +30,19 @@ namespace Pharmacien
         {
             try
             {
-                
+
                 var commandeDetail = await _apiService.GetCommande(_commande.id);
+                if (commandeDetail == null)
+                {
+                    MessageBox.Show($"Commande #{_commande.id} non trouvée", "Erreur",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Close();
+                    return;
+                }
+
                 _commande = commandeDetail;
+
+
                 lblNumero.Text = $"#{_commande.id}";
                 lblDate.Text = _commande.date_commande.ToString("dd/MM/yyyy HH:mm");
                 lblStatut.Text = GetStatutTexte(_commande.statut);
@@ -87,12 +97,32 @@ namespace Pharmacien
                 {
                     lblSymptomes.Visible = true;
                     txtSymptomes.Visible = true;
-                    txtSymptomes.Text = _commande.symptome.description;
+
+                    if (_commande.symptome != null)
+                    {
+                        txtSymptomes.Text = _commande.symptome.description;
+                        txtAllergies.Text = _commande.symptome.allergies ?? "Aucune allergie signalée";
+                    }
+                    else
+                    {
+                        txtSymptomes.Text = "Aucune description des symptômes";
+                        txtAllergies.Text = "Aucune allergie signalée";
+                    }
 
                     lblAllergies.Visible = true;
                     txtAllergies.Visible = true;
-                    txtAllergies.Text = _commande.symptome.allergies ?? "Aucune allergie signalée";
+
+                    btnProposerMedicaments.Visible = (_commande.statut == "en_attente");
                 }
+                else
+                {
+                    lblSymptomes.Visible = false;
+                    txtSymptomes.Visible = false;
+                    lblAllergies.Visible = false;
+                    txtAllergies.Visible = false;
+                    btnProposerMedicaments.Visible = false;
+                }
+                // 👆 FIN DU CODE 👆
             }
             catch (Exception ex)
             {
@@ -261,6 +291,16 @@ namespace Pharmacien
         }
 
         private void txtAllergies_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblAllergies_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblJustification_Click(object sender, EventArgs e)
         {
 
         }

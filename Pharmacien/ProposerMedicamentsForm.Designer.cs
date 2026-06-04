@@ -16,51 +16,60 @@
 
         private void InitializeComponent()
         {
-            this.dgvMedicaments = new System.Windows.Forms.DataGridView();
-            this.btnValider = new System.Windows.Forms.Button();
-            this.btnAnnuler = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMedicaments)).BeginInit();
-            this.SuspendLayout();
-
+            dgvMedicaments = new DataGridView();
+            btnValider = new Button();
+            btnAnnuler = new Button();
+            ((System.ComponentModel.ISupportInitialize)dgvMedicaments).BeginInit();
+            SuspendLayout();
+            // 
             // dgvMedicaments
-            this.dgvMedicaments.AllowUserToAddRows = false;
-            this.dgvMedicaments.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvMedicaments.ColumnHeadersHeight = 34;
-            this.dgvMedicaments.Location = new System.Drawing.Point(12, 12);
-            this.dgvMedicaments.Name = "dgvMedicaments";
-            this.dgvMedicaments.Size = new System.Drawing.Size(560, 300);
-            this.dgvMedicaments.TabIndex = 0;
-
+            // 
+            dgvMedicaments.AllowUserToAddRows = false;
+            dgvMedicaments.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvMedicaments.ColumnHeadersHeight = 34;
+            dgvMedicaments.Location = new Point(10, 9);
+            dgvMedicaments.Margin = new Padding(3, 2, 3, 2);
+            dgvMedicaments.Name = "dgvMedicaments";
+            dgvMedicaments.Size = new Size(490, 225);
+            dgvMedicaments.TabIndex = 0;
+            // 
             // btnValider
-            this.btnValider.BackColor = System.Drawing.Color.Green;
-            this.btnValider.ForeColor = System.Drawing.Color.White;
-            this.btnValider.Location = new System.Drawing.Point(350, 330);
-            this.btnValider.Name = "btnValider";
-            this.btnValider.Size = new System.Drawing.Size(100, 40);
-            this.btnValider.TabIndex = 1;
-            this.btnValider.Text = "✓ Envoyer";
-            this.btnValider.UseVisualStyleBackColor = false;
-
+            // 
+            btnValider.BackColor = Color.Green;
+            btnValider.ForeColor = Color.White;
+            btnValider.Location = new Point(306, 248);
+            btnValider.Margin = new Padding(3, 2, 3, 2);
+            btnValider.Name = "btnValider";
+            btnValider.Size = new Size(88, 30);
+            btnValider.TabIndex = 1;
+            btnValider.Text = "✓ Envoyer";
+            btnValider.UseVisualStyleBackColor = false;
+            // 
             // btnAnnuler
-            this.btnAnnuler.Location = new System.Drawing.Point(460, 330);
-            this.btnAnnuler.Name = "btnAnnuler";
-            this.btnAnnuler.Size = new System.Drawing.Size(100, 40);
-            this.btnAnnuler.TabIndex = 2;
-            this.btnAnnuler.Text = "Annuler";
-            this.btnAnnuler.UseVisualStyleBackColor = true;
-
+            // 
+            btnAnnuler.Location = new Point(402, 248);
+            btnAnnuler.Margin = new Padding(3, 2, 3, 2);
+            btnAnnuler.Name = "btnAnnuler";
+            btnAnnuler.Size = new Size(88, 30);
+            btnAnnuler.TabIndex = 2;
+            btnAnnuler.Text = "Annuler";
+            btnAnnuler.UseVisualStyleBackColor = true;
+            // 
             // ProposerMedicamentsForm
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 381);
-            this.Controls.Add(this.btnAnnuler);
-            this.Controls.Add(this.btnValider);
-            this.Controls.Add(this.dgvMedicaments);
-            this.Name = "ProposerMedicamentsForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Proposer des médicaments";
-            ((System.ComponentModel.ISupportInitialize)(this.dgvMedicaments)).EndInit();
-            this.ResumeLayout(false);
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(511, 286);
+            Controls.Add(btnAnnuler);
+            Controls.Add(btnValider);
+            Controls.Add(dgvMedicaments);
+            Margin = new Padding(3, 2, 3, 2);
+            Name = "ProposerMedicamentsForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Proposer des médicaments";
+            Load += ProposerMedicamentsForm_Load;
+            ((System.ComponentModel.ISupportInitialize)dgvMedicaments).EndInit();
+            ResumeLayout(false);
         }
     }
 }

@@ -19,6 +19,10 @@ namespace Pharmacien
             InitializeComponent();
             _apiService = apiService;
             _commande = commande;
+
+            dgvMedicaments.EditMode = DataGridViewEditMode.EditOnEnter;
+            dgvMedicaments.AllowUserToAddRows = false;
+
             btnValider.Click += btnValider_Click;
             btnAnnuler.Click += (s, e) => this.Close();
             LoadMedicaments();
@@ -46,14 +50,19 @@ namespace Pharmacien
                 if (dgvMedicaments.Columns.Contains("necessite_ordonnance"))
                     dgvMedicaments.Columns["necessite_ordonnance"].Visible = false;
 
-                // Ajouter colonne quantité
+                // ✅ Ajouter colonne quantité MODIFIABLE
                 if (!dgvMedicaments.Columns.Contains("Quantite"))
                 {
                     DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
                     col.Name = "Quantite";
                     col.HeaderText = "Quantité";
+                    col.ReadOnly = false;  // ← IMPORTANT : Rendre modifiable
                     dgvMedicaments.Columns.Add(col);
                 }
+
+                // ✅ Rendre le DataGridView modifiable
+                dgvMedicaments.EditMode = DataGridViewEditMode.EditOnEnter;
+                dgvMedicaments.AllowUserToAddRows = false;
             }
             catch (Exception ex)
             {
@@ -95,6 +104,11 @@ namespace Pharmacien
                 MessageBox.Show($"Erreur: {ex.Message}", "Erreur",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void ProposerMedicamentsForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
