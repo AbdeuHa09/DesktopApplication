@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
-using System.IO;  // ← AJOUTER CETTE LIGNE
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
@@ -25,12 +25,10 @@ namespace Pharmacien
             LoadDetails();
             LoadLivreurs();
         }
-
         private async void LoadDetails()
         {
             try
             {
-
                 var commandeDetail = await _apiService.GetCommande(_commande.id);
                 if (commandeDetail == null)
                 {
@@ -41,7 +39,6 @@ namespace Pharmacien
                 }
 
                 _commande = commandeDetail;
-
 
                 lblNumero.Text = $"#{_commande.id}";
                 lblDate.Text = _commande.date_commande.ToString("dd/MM/yyyy HH:mm");
@@ -57,7 +54,7 @@ namespace Pharmacien
                 };
                 lblType.Text = typeTexte;
 
-                // ✅ Afficher le bouton ordonnance seulement si nécessaire
+                // Afficher le bouton ordonnance si nécessaire
                 btnVoirOrdonnance.Visible = (_commande.type_commande == "ordonnance" && _commande.ordonnance != null);
 
                 if (_commande.client != null)
@@ -83,8 +80,12 @@ namespace Pharmacien
                     lblTotal.Text = $"{total:F2} MAD";
                 }
 
-                btnValider.Enabled = _commande.statut == "en_attente";
-                btnRefuser.Enabled = _commande.statut == "en_attente";
+                // Activer les boutons pour en_attente ET en_attente_livreur
+                btnValider.Enabled = (_commande.statut == "en_attente" || _commande.statut == "en_attente_livreur");
+                btnRefuser.Enabled = (_commande.statut == "en_attente");
+
+                // Activer le ComboBox seulement si on peut valider
+                cmbLivreur.Enabled = true;
 
                 if (_commande.statut == "refusee" && _commande.livraison != null)
                 {
@@ -92,43 +93,38 @@ namespace Pharmacien
                     txtJustification.Visible = true;
                     txtJustification.Text = _commande.livraison.justification ?? "Aucune justification";
                 }
-                // Afficher les symptômes si la commande est de type symptômes
+
+                // NOUVEAU CODE - Remplacer l'affichage des symptômes par le bouton
                 if (_commande.type_commande == "symptomes")
                 {
-                    lblSymptomes.Visible = true;
-                    txtSymptomes.Visible = true;
+                    // Afficher le bouton pour voir les symptômes au lieu des champs directs
+                    btnVoirSymptomes.Visible = true;
+                    btnVoirSymptomes.Enabled = (_commande.symptome != null);
 
-                    if (_commande.symptome != null)
-                    {
-                        txtSymptomes.Text = _commande.symptome.description;
-                        txtAllergies.Text = _commande.symptome.allergies ?? "Aucune allergie signalée";
-                    }
-                    else
-                    {
-                        txtSymptomes.Text = "Aucune description des symptômes";
-                        txtAllergies.Text = "Aucune allergie signalée";
-                    }
-
-                    lblAllergies.Visible = true;
-                    txtAllergies.Visible = true;
-
-                    btnProposerMedicaments.Visible = (_commande.statut == "en_attente");
-                }
-                else
-                {
+                    // Cacher les champs directs
                     lblSymptomes.Visible = false;
                     txtSymptomes.Visible = false;
                     lblAllergies.Visible = false;
                     txtAllergies.Visible = false;
-                    btnProposerMedicaments.Visible = false;
+
+                    
                 }
-                // 👆 FIN DU CODE 👆
+                else
+                {
+                    btnVoirSymptomes.Visible = false;
+                    lblSymptomes.Visible = false;
+                    txtSymptomes.Visible = false;
+                    lblAllergies.Visible = false;
+                    txtAllergies.Visible = false;
+                   
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur: {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private async void LoadLivreurs()
         {
@@ -254,6 +250,7 @@ namespace Pharmacien
             return statut switch
             {
                 "en_attente" => "⏳ En attente",
+                "en_attente_livreur" => "🚚 En attente livreur",
                 "validee" => "✅ Validée",
                 "en_livraison" => "🚚 En livraison",
                 "livree" => "🏠 Livrée",
@@ -267,6 +264,7 @@ namespace Pharmacien
             return statut switch
             {
                 "en_attente" => Color.LightYellow,
+                "en_attente_livreur" => Color.LightCyan,
                 "validee" => Color.LightGreen,
                 "en_livraison" => Color.LightBlue,
                 "livree" => Color.LightGreen,
@@ -274,6 +272,7 @@ namespace Pharmacien
                 _ => Color.White
             };
         }
+
         private void btnProposerMedicaments_Click(object sender, EventArgs e)
         {
             ProposerMedicamentsForm proposerForm = new ProposerMedicamentsForm(_apiService, _commande);
@@ -286,23 +285,33 @@ namespace Pharmacien
                 this.Close();
             }
         }
+        private void btnVoirSymptomes_Click(object sender, EventArgs e)
+        {
+            if (_commande.symptome != null)
+            {
+                FicheSymptomesForm ficheForm = new FicheSymptomesForm(_apiService, _commande, _commande.symptome);
+                ficheForm.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Aucune information sur les symptômes disponible.", "Information",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
         private void DetailCommandeForm_Load(object sender, EventArgs e)
         {
         }
 
         private void txtAllergies_TextChanged(object sender, EventArgs e)
         {
-
         }
 
         private void lblAllergies_Click(object sender, EventArgs e)
         {
-
         }
 
         private void lblJustification_Click(object sender, EventArgs e)
         {
-
         }
     }
 }

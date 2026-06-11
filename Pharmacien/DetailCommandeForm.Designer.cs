@@ -19,13 +19,13 @@
         private System.Windows.Forms.Label lblJustification;
         private System.Windows.Forms.TextBox txtJustification;
         private System.Windows.Forms.Button btnVoirOrdonnance;
+        private System.Windows.Forms.Button btnVoirSymptomes;  // ← AJOUTÉ
 
         // Nouveaux contrôles pour les symptômes
         private System.Windows.Forms.Label lblSymptomes;
         private System.Windows.Forms.TextBox txtSymptomes;
         private System.Windows.Forms.Label lblAllergies;
         private System.Windows.Forms.TextBox txtAllergies;
-        private System.Windows.Forms.Button btnProposerMedicaments;
 
         protected override void Dispose(bool disposing)
         {
@@ -52,11 +52,11 @@
             lblJustification = new Label();
             txtJustification = new TextBox();
             btnVoirOrdonnance = new Button();
+            btnVoirSymptomes = new Button();
             lblSymptomes = new Label();
             txtSymptomes = new TextBox();
             lblAllergies = new Label();
             txtAllergies = new TextBox();
-            btnProposerMedicaments = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvMedicaments).BeginInit();
             SuspendLayout();
             // 
@@ -66,7 +66,7 @@
             lblNumero.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
             lblNumero.Location = new Point(20, 20);
             lblNumero.Name = "lblNumero";
-            lblNumero.Size = new Size(0, 25);
+            lblNumero.Size = new Size(0, 38);
             lblNumero.TabIndex = 0;
             // 
             // lblDate
@@ -74,7 +74,7 @@
             lblDate.AutoSize = true;
             lblDate.Location = new Point(20, 50);
             lblDate.Name = "lblDate";
-            lblDate.Size = new Size(0, 15);
+            lblDate.Size = new Size(0, 25);
             lblDate.TabIndex = 1;
             // 
             // lblStatut
@@ -83,7 +83,7 @@
             lblStatut.Location = new Point(20, 80);
             lblStatut.Name = "lblStatut";
             lblStatut.Padding = new Padding(5);
-            lblStatut.Size = new Size(10, 25);
+            lblStatut.Size = new Size(10, 35);
             lblStatut.TabIndex = 2;
             // 
             // lblType
@@ -91,7 +91,7 @@
             lblType.AutoSize = true;
             lblType.Location = new Point(20, 110);
             lblType.Name = "lblType";
-            lblType.Size = new Size(0, 15);
+            lblType.Size = new Size(0, 25);
             lblType.TabIndex = 3;
             // 
             // lblClient
@@ -100,7 +100,7 @@
             lblClient.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblClient.Location = new Point(20, 150);
             lblClient.Name = "lblClient";
-            lblClient.Size = new Size(0, 19);
+            lblClient.Size = new Size(0, 28);
             lblClient.TabIndex = 4;
             // 
             // lblEmail
@@ -108,7 +108,7 @@
             lblEmail.AutoSize = true;
             lblEmail.Location = new Point(20, 180);
             lblEmail.Name = "lblEmail";
-            lblEmail.Size = new Size(0, 15);
+            lblEmail.Size = new Size(0, 25);
             lblEmail.TabIndex = 5;
             // 
             // lblTel
@@ -116,7 +116,7 @@
             lblTel.AutoSize = true;
             lblTel.Location = new Point(20, 210);
             lblTel.Name = "lblTel";
-            lblTel.Size = new Size(0, 15);
+            lblTel.Size = new Size(0, 25);
             lblTel.TabIndex = 6;
             // 
             // lblAdresse
@@ -125,7 +125,7 @@
             lblAdresse.Location = new Point(20, 240);
             lblAdresse.MaximumSize = new Size(300, 0);
             lblAdresse.Name = "lblAdresse";
-            lblAdresse.Size = new Size(0, 15);
+            lblAdresse.Size = new Size(0, 25);
             lblAdresse.TabIndex = 7;
             // 
             // dgvMedicaments
@@ -146,7 +146,7 @@
             lblTotal.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             lblTotal.Location = new Point(350, 330);
             lblTotal.Name = "lblTotal";
-            lblTotal.Size = new Size(0, 21);
+            lblTotal.Size = new Size(0, 32);
             lblTotal.TabIndex = 9;
             // 
             // cmbLivreur
@@ -154,7 +154,7 @@
             cmbLivreur.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbLivreur.Location = new Point(20, 320);
             cmbLivreur.Name = "cmbLivreur";
-            cmbLivreur.Size = new Size(250, 23);
+            cmbLivreur.Size = new Size(250, 33);
             cmbLivreur.TabIndex = 10;
             // 
             // btnValider
@@ -186,7 +186,7 @@
             lblJustification.AutoSize = true;
             lblJustification.Location = new Point(148, 408);
             lblJustification.Name = "lblJustification";
-            lblJustification.Size = new Size(122, 15);
+            lblJustification.Size = new Size(183, 25);
             lblJustification.TabIndex = 13;
             lblJustification.Text = "Justification du refus :";
             lblJustification.Visible = false;
@@ -215,13 +215,26 @@
             btnVoirOrdonnance.Visible = false;
             btnVoirOrdonnance.Click += btnVoirOrdonnance_Click;
             // 
+            // btnVoirSymptomes
+            // 
+            btnVoirSymptomes.BackColor = Color.FromArgb(59, 130, 246);
+            btnVoirSymptomes.ForeColor = Color.White;
+            btnVoirSymptomes.Location = new Point(350, 410);
+            btnVoirSymptomes.Name = "btnVoirSymptomes";
+            btnVoirSymptomes.Size = new Size(150, 40);
+            btnVoirSymptomes.TabIndex = 21;
+            btnVoirSymptomes.Text = "\U0001fa7a Voir symptômes";
+            btnVoirSymptomes.UseVisualStyleBackColor = false;
+            btnVoirSymptomes.Visible = false;
+            btnVoirSymptomes.Click += btnVoirSymptomes_Click;
+            // 
             // lblSymptomes
             // 
             lblSymptomes.AutoSize = true;
             lblSymptomes.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblSymptomes.Location = new Point(20, 270);
             lblSymptomes.Name = "lblSymptomes";
-            lblSymptomes.Size = new Size(96, 19);
+            lblSymptomes.Size = new Size(133, 28);
             lblSymptomes.TabIndex = 16;
             lblSymptomes.Text = "Symptômes :";
             lblSymptomes.Visible = false;
@@ -242,7 +255,7 @@
             lblAllergies.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblAllergies.Location = new Point(20, 406);
             lblAllergies.Name = "lblAllergies";
-            lblAllergies.Size = new Size(76, 19);
+            lblAllergies.Size = new Size(106, 28);
             lblAllergies.TabIndex = 18;
             lblAllergies.Text = "Allergies :";
             lblAllergies.Visible = false;
@@ -258,23 +271,10 @@
             txtAllergies.TabIndex = 19;
             txtAllergies.Visible = false;
             // 
-            // btnProposerMedicaments
-            // 
-            btnProposerMedicaments.BackColor = Color.FromArgb(139, 92, 246);
-            btnProposerMedicaments.ForeColor = Color.White;
-            btnProposerMedicaments.Location = new Point(533, 360);
-            btnProposerMedicaments.Name = "btnProposerMedicaments";
-            btnProposerMedicaments.Size = new Size(150, 40);
-            btnProposerMedicaments.TabIndex = 20;
-            btnProposerMedicaments.Text = "💊 Proposer médicaments";
-            btnProposerMedicaments.UseVisualStyleBackColor = false;
-            btnProposerMedicaments.Visible = false;
-            btnProposerMedicaments.Click += btnProposerMedicaments_Click;
-            // 
             // DetailCommandeForm
             // 
             ClientSize = new Size(800, 550);
-            Controls.Add(btnProposerMedicaments);
+            Controls.Add(btnVoirSymptomes);
             Controls.Add(txtAllergies);
             Controls.Add(lblAllergies);
             Controls.Add(txtSymptomes);

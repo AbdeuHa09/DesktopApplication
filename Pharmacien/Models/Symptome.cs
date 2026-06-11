@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿// Models/Symptome.cs
+using Newtonsoft.Json;
 
 namespace Pharmacien.Models
 {
@@ -15,5 +16,10 @@ namespace Pharmacien.Models
 
         [JsonProperty("id_client")]
         public int id_client { get; set; }
+
+        [JsonProperty("commande_id")]
+        public int commande_id { get; set; }
+
+        // ⚠️ PAS de propriétés age et traitements ici ⚠️
     }
 }
