@@ -142,5 +142,20 @@ namespace Pharmacien.Services
             var json = await response.Content.ReadAsStringAsync();
             return json;
         }
+        public async Task<bool> UpdateStatutPharmacie(string statut)
+        {
+            var data = new { statut_pharmacie = statut };
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync($"{BASE_URL}/pharmacien/statut", content);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<string> GetStatutPharmacie()
+        {
+            var response = await _httpClient.GetAsync($"{BASE_URL}/pharmacien/statut");
+            var json = await response.Content.ReadAsStringAsync();
+            dynamic result = JsonConvert.DeserializeObject(json);
+            return result?.statut_pharmacie?.ToString();
+        }
     }
 }
