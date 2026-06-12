@@ -25,9 +25,9 @@ namespace Pharmacien
             LoadDetails();
             LoadLivreurs();
         }
+
         private async void LoadDetails()
         {
-           
             try
             {
                 var commandeDetail = await _apiService.GetCommande(_commande.id);
@@ -80,15 +80,36 @@ namespace Pharmacien
                     lblTotal.Text = $"{total:F2} MAD";
                 }
 
-                btnValider.Enabled = (_commande.statut == "en_attente");
-                btnRefuser.Enabled = (_commande.statut == "en_attente");
-                cmbLivreur.Enabled = true;
+                // ========== LOGIQUE DES BOUTONS CORRIGÉE ==========
+                // Pour SELECTION et ORDONNANCE : validation directe depuis "en_attente"
+                // Pour SYMPTOMES : validation après acceptation client (statut "en_cours")
+                if (_commande.type_commande == "selection" || _commande.type_commande == "ordonnance")
+                {
+                    btnValider.Enabled = (_commande.statut == "en_attente");
+                    cmbLivreur.Enabled = (_commande.statut == "en_attente");
+                }
+                else // SYMPTOMES
+                {
+                    btnValider.Enabled = (_commande.statut == "en_cours");
+                    cmbLivreur.Enabled = (_commande.statut == "en_cours");
+                }
 
-                if (_commande.statut == "refusee" && _commande.livraison != null)
+                btnValider.Visible = true;
+                btnRefuser.Enabled = (_commande.statut == "en_attente");
+                btnRefuser.Visible = true;
+                cmbLivreur.Visible = true;
+                // ==================================================
+
+                if (_commande.statut == "refusee" && _commande.livraison != null && !string.IsNullOrEmpty(_commande.livraison.justification))
                 {
                     lblJustification.Visible = true;
                     txtJustification.Visible = true;
-                    txtJustification.Text = _commande.livraison.justification ?? "Aucune justification";
+                    txtJustification.Text = _commande.livraison.justification;
+                }
+                else
+                {
+                    lblJustification.Visible = false;
+                    txtJustification.Visible = false;
                 }
 
                 if (_commande.type_commande == "symptomes")
@@ -109,12 +130,12 @@ namespace Pharmacien
                     txtAllergies.Visible = false;
                 }
 
-                // ========== 👇 AJOUTER CE CODE POUR LE BOUTON 👇 ==========
+                // Bouton proposer médicaments
                 if (_commande.type_commande == "ordonnance")
                 {
                     btnProposerMedicamentsOrdonnance.Visible = true;
                     btnProposerMedicamentsOrdonnance.Enabled = (_commande.statut == "en_attente");
-                    btnProposerMedicamentsOrdonnance.Text = "💊 Proposer médicaments";
+                    btnProposerMedicamentsOrdonnance.Text = "💊 Proposer médicaments (Ordonnance)";
                 }
                 else if (_commande.type_commande == "symptomes")
                 {
@@ -126,15 +147,12 @@ namespace Pharmacien
                 {
                     btnProposerMedicamentsOrdonnance.Visible = false;
                 }
-                // ========== 👆 FIN DU CODE AJOUTÉ 👆 ==========
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur: {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        
-
 
         private async void LoadLivreurs()
         {
@@ -145,6 +163,7 @@ namespace Pharmacien
                 cmbLivreur.DisplayMember = "prenom";
                 cmbLivreur.ValueMember = "id";
                 cmbLivreur.SelectedIndex = -1;
+                cmbLivreur.DropDownStyle = ComboBoxStyle.DropDownList;
             }
             catch (Exception ex)
             {
@@ -168,7 +187,7 @@ namespace Pharmacien
                 {
                     int livreurId = (int)cmbLivreur.SelectedValue;
                     await _apiService.ValiderCommande(_commande.id, livreurId);
-                    MessageBox.Show("Commande validée avec succès !", "Succès",
+                    MessageBox.Show("Commande validée et livreur assigné !", "Succès",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.DialogResult = DialogResult.OK;
                     this.Close();
@@ -260,7 +279,7 @@ namespace Pharmacien
             return statut switch
             {
                 "en_attente" => "⏳ En attente",
-                "en_attente_livreur" => "🚚 En attente livreur",
+                "en_cours" => "🔄 En cours (attente validation)",
                 "validee" => "✅ Validée",
                 "en_livraison" => "🚚 En livraison",
                 "livree" => "🏠 Livrée",
@@ -274,7 +293,7 @@ namespace Pharmacien
             return statut switch
             {
                 "en_attente" => Color.LightYellow,
-                "en_attente_livreur" => Color.LightCyan,
+                "en_cours" => Color.LightCyan,
                 "validee" => Color.LightGreen,
                 "en_livraison" => Color.LightBlue,
                 "livree" => Color.LightGreen,
@@ -283,24 +302,26 @@ namespace Pharmacien
             };
         }
 
-        private void btnProposerMedicaments_Click(object sender, EventArgs e)
+        private void btnProposerMedicamentsOrdonnance_Click(object sender, EventArgs e)
         {
-            ProposerMedicamentsForm proposerForm = new ProposerMedicamentsForm(_apiService, _commande);
+            string type = _commande.type_commande == "ordonnance" ? "ordonnance" : "symptomes";
+            ProposerMedicamentsForm proposerForm = new ProposerMedicamentsForm(_apiService, _commande, type);
             var result = proposerForm.ShowDialog();
             if (result == DialogResult.OK)
             {
-                MessageBox.Show("Proposition envoyée au client !", "Succès",
+                MessageBox.Show("Médicaments proposés au client !", "Succès",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                LoadDetails();
             }
         }
+
         private void btnVoirSymptomes_Click(object sender, EventArgs e)
         {
             if (_commande.symptome != null)
             {
-                FicheSymptomesForm ficheForm = new FicheSymptomesForm(_apiService, _commande, _commande.symptome);
-                ficheForm.ShowDialog();
+                string message = $"Symptômes: {_commande.symptome.description}\n\nAllergies: {_commande.symptome.allergies ?? "Aucune"}";
+                MessageBox.Show(message, "Informations symptômes",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -308,6 +329,7 @@ namespace Pharmacien
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
         private void DetailCommandeForm_Load(object sender, EventArgs e)
         {
         }
@@ -322,18 +344,6 @@ namespace Pharmacien
 
         private void lblJustification_Click(object sender, EventArgs e)
         {
-        }
-
-        private void btnProposerMedicamentsOrdonnance_Click(object sender, EventArgs e)
-        {
-            ProposerMedicamentsForm proposerForm = new ProposerMedicamentsForm(_apiService, _commande, "ordonnance");
-            var result = proposerForm.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                MessageBox.Show("Médicaments proposés au client !", "Succès",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LoadDetails();
-            }
         }
     }
 }
