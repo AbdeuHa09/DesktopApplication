@@ -13,12 +13,14 @@ namespace Pharmacien
         private ApiService _apiService;
         private Commande _commande;
         private List<Medicament> _medicaments;
+        private string _typeCommande;
 
-        public ProposerMedicamentsForm(ApiService apiService, Commande commande)
+        public ProposerMedicamentsForm(ApiService apiService, Commande commande, string typeCommande = "symptomes")
         {
             InitializeComponent();
             _apiService = apiService;
             _commande = commande;
+            _typeCommande = typeCommande;
 
             dgvMedicaments.EditMode = DataGridViewEditMode.EditOnEnter;
             dgvMedicaments.AllowUserToAddRows = false;
@@ -93,8 +95,18 @@ namespace Pharmacien
 
             try
             {
-                await _apiService.ProposerMedicaments(_commande.id, medicamentsProposes);
-                MessageBox.Show("Proposition envoyée au client !", "Succès",
+                // Utiliser le bon endpoint selon le type de commande
+                string result;
+                if (_typeCommande == "ordonnance")
+                {
+                    result = await _apiService.ProposerMedicamentsOrdonnance(_commande.id, medicamentsProposes);
+                }
+                else
+                {
+                    result = await _apiService.ProposerMedicaments(_commande.id, medicamentsProposes);
+                }
+
+                MessageBox.Show("Médicaments proposés avec succès !", "Succès",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.DialogResult = DialogResult.OK;
                 this.Close();

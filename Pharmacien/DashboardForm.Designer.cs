@@ -10,6 +10,8 @@
         private System.Windows.Forms.Label lblLivrees;
         private System.Windows.Forms.Button btnActualiser;
         private System.Windows.Forms.Button btnDeconnexion;
+        private System.Windows.Forms.Label lblStatutPharmacie;
+        private System.Windows.Forms.Button btnToggleStatut;
 
         protected override void Dispose(bool disposing)
         {
@@ -28,6 +30,8 @@
             btnActualiser = new Button();
             btnDeconnexion = new Button();
             btnGestionStock = new Button();
+            lblStatutPharmacie = new Label();
+            btnToggleStatut = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvCommandes).BeginInit();
             SuspendLayout();
             // 
@@ -44,7 +48,7 @@
             dgvCommandes.RowHeadersWidth = 51;
             dgvCommandes.RowTemplate.Height = 29;
             dgvCommandes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCommandes.Size = new Size(875, 225);
+            dgvCommandes.Size = new Size(926, 214);
             dgvCommandes.TabIndex = 0;
             // 
             // lblTotal
@@ -86,7 +90,7 @@
             // btnActualiser
             // 
             btnActualiser.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnActualiser.Location = new Point(10, 338);
+            btnActualiser.Location = new Point(10, 327);
             btnActualiser.Margin = new Padding(3, 2, 3, 2);
             btnActualiser.Name = "btnActualiser";
             btnActualiser.Size = new Size(105, 26);
@@ -98,7 +102,7 @@
             // btnDeconnexion
             // 
             btnDeconnexion.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnDeconnexion.Location = new Point(780, 338);
+            btnDeconnexion.Location = new Point(831, 327);
             btnDeconnexion.Margin = new Padding(3, 2, 3, 2);
             btnDeconnexion.Name = "btnDeconnexion";
             btnDeconnexion.Size = new Size(105, 26);
@@ -110,7 +114,7 @@
             // btnGestionStock
             // 
             btnGestionStock.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnGestionStock.Location = new Point(401, 338);
+            btnGestionStock.Location = new Point(452, 327);
             btnGestionStock.Margin = new Padding(3, 2, 3, 2);
             btnGestionStock.Name = "btnGestionStock";
             btnGestionStock.Size = new Size(105, 26);
@@ -119,11 +123,32 @@
             btnGestionStock.UseVisualStyleBackColor = true;
             btnGestionStock.Click += btnGestionStock_Click;
             // 
+            // lblStatutPharmacie
+            // 
+            lblStatutPharmacie.AutoSize = true;
+            lblStatutPharmacie.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            lblStatutPharmacie.Location = new Point(410, 15);
+            lblStatutPharmacie.Name = "lblStatutPharmacie";
+            lblStatutPharmacie.Size = new Size(158, 20);
+            lblStatutPharmacie.TabIndex = 8;
+            lblStatutPharmacie.Text = "Statut: Chargement...";
+            lblStatutPharmacie.Click += lblStatutPharmacie_Click;
+            // 
+            // btnToggleStatut
+            // 
+            btnToggleStatut.Location = new Point(254, 12);
+            btnToggleStatut.Name = "btnToggleStatut";
+            btnToggleStatut.Size = new Size(150, 26);
+            btnToggleStatut.TabIndex = 9;
+            btnToggleStatut.Text = "Changer statut";
+            btnToggleStatut.UseVisualStyleBackColor = true;
+            btnToggleStatut.Click += btnToggleStatut_Click;
+            // 
             // DashboardForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(896, 375);
+            ClientSize = new Size(947, 364);
             Controls.Add(btnGestionStock);
             Controls.Add(btnDeconnexion);
             Controls.Add(btnActualiser);
@@ -132,6 +157,8 @@
             Controls.Add(lblEnAttente);
             Controls.Add(lblTotal);
             Controls.Add(dgvCommandes);
+            Controls.Add(lblStatutPharmacie);
+            Controls.Add(btnToggleStatut);
             Margin = new Padding(3, 2, 3, 2);
             MinimumSize = new Size(527, 310);
             Name = "DashboardForm";

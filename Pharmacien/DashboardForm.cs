@@ -33,6 +33,7 @@ namespace Pharmacien
             _user = user;
             LoadCommandes();
             LoadStats();
+            LoadStatutPharmacie();
         }
 
         private async Task LoadCommandes()
@@ -117,6 +118,72 @@ namespace Pharmacien
         {
             GestionStockForm stockForm = new GestionStockForm(_apiService);
             stockForm.ShowDialog();
+        }
+        private async void LoadStatutPharmacie()
+        {
+            try
+            {
+                string statut = await _apiService.GetStatutPharmacie();
+                UpdateStatutAffichage(statut);
+            }
+            catch (Exception ex)
+            {
+                lblStatutPharmacie.Text = "❌ Statut: Erreur";
+                Console.WriteLine($"Erreur: {ex.Message}");
+            }
+        }
+
+        private void UpdateStatutAffichage(string statut)
+        {
+            if (statut == "ouvert")
+            {
+                lblStatutPharmacie.Text = "🟢 Statut: Ouvert";
+                lblStatutPharmacie.ForeColor = System.Drawing.Color.Green;
+                btnToggleStatut.Text = "🔴 Fermer la pharmacie";
+                btnToggleStatut.BackColor = System.Drawing.Color.Green;
+                btnToggleStatut.ForeColor = System.Drawing.Color.White;
+            }
+            else
+            {
+                lblStatutPharmacie.Text = "🔴 Statut: Fermé";
+                lblStatutPharmacie.ForeColor = System.Drawing.Color.Red;
+                btnToggleStatut.Text = "🟢 Ouvrir la pharmacie";
+                btnToggleStatut.BackColor = System.Drawing.Color.Red;
+                btnToggleStatut.ForeColor = System.Drawing.Color.White;
+            }
+        }
+
+        private async void btnToggleStatut_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string statutActuel = await _apiService.GetStatutPharmacie();
+                string nouveauStatut = statutActuel == "ouvert" ? "ferme" : "ouvert";
+
+                bool success = await _apiService.UpdateStatutPharmacie(nouveauStatut);
+
+                if (success)
+                {
+                    UpdateStatutAffichage(nouveauStatut);
+                    MessageBox.Show($"Pharmacie {nouveauStatut}", "Succès",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Erreur lors du changement de statut", "Erreur",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur: {ex.Message}", "Erreur",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void lblStatutPharmacie_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

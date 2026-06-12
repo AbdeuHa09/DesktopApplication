@@ -157,5 +157,26 @@ namespace Pharmacien.Services
             dynamic result = JsonConvert.DeserializeObject(json);
             return result?.statut_pharmacie?.ToString();
         }
+        public async Task<string> ProposerMedicaments(int commandeId, List<object> medicaments, string type = "symptomes")
+        {
+            string endpoint = type == "ordonnance"
+                ? $"{BASE_URL}/pharmacien/commande/{commandeId}/proposer-ordonnance"
+                : $"{BASE_URL}/pharmacien/commande/{commandeId}/proposer";
+
+            var data = new { medicaments };
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(endpoint, content);
+            var json = await response.Content.ReadAsStringAsync();
+            return json;
+        }
+        public async Task<string> ProposerMedicamentsOrdonnance(int commandeId, List<object> medicaments)
+        {
+            var data = new { medicaments };
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync($"{BASE_URL}/pharmacien/commande/{commandeId}/proposer-ordonnance", content);
+            var json = await response.Content.ReadAsStringAsync();
+            return json;
+        }
+
     }
 }

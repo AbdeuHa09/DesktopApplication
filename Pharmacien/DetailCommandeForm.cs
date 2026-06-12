@@ -27,6 +27,7 @@ namespace Pharmacien
         }
         private async void LoadDetails()
         {
+           
             try
             {
                 var commandeDetail = await _apiService.GetCommande(_commande.id);
@@ -54,7 +55,6 @@ namespace Pharmacien
                 };
                 lblType.Text = typeTexte;
 
-                // Afficher le bouton ordonnance si nécessaire
                 btnVoirOrdonnance.Visible = (_commande.type_commande == "ordonnance" && _commande.ordonnance != null);
 
                 if (_commande.client != null)
@@ -80,11 +80,8 @@ namespace Pharmacien
                     lblTotal.Text = $"{total:F2} MAD";
                 }
 
-                // Activer les boutons pour en_attente ET en_attente_livreur
-                btnValider.Enabled = (_commande.statut == "en_attente" || _commande.statut == "en_attente_livreur");
+                btnValider.Enabled = (_commande.statut == "en_attente");
                 btnRefuser.Enabled = (_commande.statut == "en_attente");
-
-                // Activer le ComboBox seulement si on peut valider
                 cmbLivreur.Enabled = true;
 
                 if (_commande.statut == "refusee" && _commande.livraison != null)
@@ -94,20 +91,14 @@ namespace Pharmacien
                     txtJustification.Text = _commande.livraison.justification ?? "Aucune justification";
                 }
 
-                // NOUVEAU CODE - Remplacer l'affichage des symptômes par le bouton
                 if (_commande.type_commande == "symptomes")
                 {
-                    // Afficher le bouton pour voir les symptômes au lieu des champs directs
                     btnVoirSymptomes.Visible = true;
                     btnVoirSymptomes.Enabled = (_commande.symptome != null);
-
-                    // Cacher les champs directs
                     lblSymptomes.Visible = false;
                     txtSymptomes.Visible = false;
                     lblAllergies.Visible = false;
                     txtAllergies.Visible = false;
-
-                    
                 }
                 else
                 {
@@ -116,14 +107,33 @@ namespace Pharmacien
                     txtSymptomes.Visible = false;
                     lblAllergies.Visible = false;
                     txtAllergies.Visible = false;
-                   
                 }
+
+                // ========== 👇 AJOUTER CE CODE POUR LE BOUTON 👇 ==========
+                if (_commande.type_commande == "ordonnance")
+                {
+                    btnProposerMedicamentsOrdonnance.Visible = true;
+                    btnProposerMedicamentsOrdonnance.Enabled = (_commande.statut == "en_attente");
+                    btnProposerMedicamentsOrdonnance.Text = "💊 Proposer médicaments";
+                }
+                else if (_commande.type_commande == "symptomes")
+                {
+                    btnProposerMedicamentsOrdonnance.Visible = true;
+                    btnProposerMedicamentsOrdonnance.Enabled = (_commande.statut == "en_attente");
+                    btnProposerMedicamentsOrdonnance.Text = "💊 Proposer médicaments (Symptômes)";
+                }
+                else
+                {
+                    btnProposerMedicamentsOrdonnance.Visible = false;
+                }
+                // ========== 👆 FIN DU CODE AJOUTÉ 👆 ==========
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur: {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        
 
 
         private async void LoadLivreurs()
@@ -312,6 +322,18 @@ namespace Pharmacien
 
         private void lblJustification_Click(object sender, EventArgs e)
         {
+        }
+
+        private void btnProposerMedicamentsOrdonnance_Click(object sender, EventArgs e)
+        {
+            ProposerMedicamentsForm proposerForm = new ProposerMedicamentsForm(_apiService, _commande, "ordonnance");
+            var result = proposerForm.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                MessageBox.Show("Médicaments proposés au client !", "Succès",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadDetails();
+            }
         }
     }
 }
