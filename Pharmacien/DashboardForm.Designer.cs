@@ -50,6 +50,7 @@
             dgvCommandes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvCommandes.Size = new Size(926, 214);
             dgvCommandes.TabIndex = 0;
+            dgvCommandes.CellContentClick += dgvCommandes_CellContentClick;
             // 
             // lblTotal
             // 

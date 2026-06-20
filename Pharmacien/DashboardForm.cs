@@ -20,6 +20,11 @@ namespace Pharmacien
         public DashboardForm(ApiService apiService, User user)
         {
             InitializeComponent();
+
+            // Désactive la génération automatique des colonnes
+            // -> on définit nous-mêmes uniquement les colonnes nécessaires
+            dgvCommandes.AutoGenerateColumns = false;
+
             dgvCommandes.CellDoubleClick += dgvCommandes_CellDoubleClick;
 
             Button btnGestionStock = new Button();
@@ -36,27 +41,58 @@ namespace Pharmacien
             LoadStatutPharmacie();
         }
 
+        /// <summary>
+        /// Définit les colonnes à afficher dans le DataGridView des commandes.
+        /// Seules les informations nécessaires sont affichées : N°, Date, Type, Statut.
+        /// </summary>
+        private void ConfigurerColonnesCommandes()
+        {
+            dgvCommandes.Columns.Clear();
+
+            dgvCommandes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "id",
+                DataPropertyName = "id",
+                HeaderText = "N°",
+                Width = 50
+            });
+
+            dgvCommandes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "date_commande",
+                DataPropertyName = "date_commande",
+                HeaderText = "Date",
+                Width = 150
+            });
+
+            dgvCommandes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "type_commande",
+                DataPropertyName = "type_commande",
+                HeaderText = "Type",
+                Width = 120
+            });
+
+            dgvCommandes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "statut",
+                DataPropertyName = "statut",
+                HeaderText = "Statut",
+                Width = 120
+            });
+        }
+
         private async Task LoadCommandes()
         {
             try
             {
                 _commandes = await _apiService.GetCommandes();
+
+                if (dgvCommandes.Columns.Count == 0)
+                    ConfigurerColonnesCommandes();
+
                 dgvCommandes.DataSource = null;
                 dgvCommandes.DataSource = _commandes;
-
-                string[] colonnesAMasquer = { "client", "livraison", "ligne_medicaments", "ordonnance", "pharmacien" };
-                foreach (var col in colonnesAMasquer)
-                    if (dgvCommandes.Columns.Contains(col))
-                        dgvCommandes.Columns[col].Visible = false;
-
-                if (dgvCommandes.Columns.Contains("id"))
-                    dgvCommandes.Columns["id"].HeaderText = "N°";
-                if (dgvCommandes.Columns.Contains("date_commande"))
-                    dgvCommandes.Columns["date_commande"].HeaderText = "Date";
-                if (dgvCommandes.Columns.Contains("type_commande"))
-                    dgvCommandes.Columns["type_commande"].HeaderText = "Type";
-                if (dgvCommandes.Columns.Contains("statut"))
-                    dgvCommandes.Columns["statut"].HeaderText = "Statut";
             }
             catch (Exception ex)
             {
@@ -182,6 +218,11 @@ namespace Pharmacien
         }
 
         private void lblStatutPharmacie_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dgvCommandes_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
