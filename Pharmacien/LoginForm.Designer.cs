@@ -44,7 +44,7 @@
             lblTitre.Name = "lblTitre";
             lblTitre.Size = new Size(877, 49);
             lblTitre.TabIndex = 0;
-            lblTitre.Text = "PharmaConnect";
+            lblTitre.Text = "MEDICONNECT";
             lblTitre.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblSubtitle
@@ -157,7 +157,7 @@
             MinimumSize = new Size(527, 385);
             Name = "LoginForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "PharmaConnect - Pharmacien";
+            Text = "MEDICONNECT - Pharmacien";
             tableLayout.ResumeLayout(false);
             panelCenter.ResumeLayout(false);
             panelCenter.PerformLayout();
