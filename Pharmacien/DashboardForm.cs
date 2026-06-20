@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.LinkLabel;
 
 namespace Pharmacien
 {
@@ -36,8 +35,8 @@ namespace Pharmacien
 
             _apiService = apiService;
             _user = user;
-            LoadCommandes();
-            LoadStats();
+            _ = LoadCommandes();
+            _ = LoadStats();
             LoadStatutPharmacie();
         }
 
@@ -107,8 +106,11 @@ namespace Pharmacien
                 var commandes = await _apiService.GetCommandes();
                 lblTotal.Text = $"Total: {commandes.Count}";
                 lblEnAttente.Text = $"En attente: {commandes.Count(c => c.statut == "en_attente")}";
+                lblEnCours.Text = $"En cours: {commandes.Count(c => c.statut == "en_cours")}";
                 lblValidees.Text = $"Validées: {commandes.Count(c => c.statut == "validee")}";
+                lblEnLivraison.Text = $"En livraison: {commandes.Count(c => c.statut == "en_livraison")}";
                 lblLivrees.Text = $"Livrées: {commandes.Count(c => c.statut == "livree")}";
+                lblRefusees.Text = $"Refusées: {commandes.Count(c => c.statut == "refusee")}";
             }
             catch (Exception ex)
             {
@@ -155,6 +157,7 @@ namespace Pharmacien
             GestionStockForm stockForm = new GestionStockForm(_apiService);
             stockForm.ShowDialog();
         }
+
         private async void LoadStatutPharmacie()
         {
             try
@@ -219,7 +222,6 @@ namespace Pharmacien
 
         private void lblStatutPharmacie_Click(object sender, EventArgs e)
         {
-
         }
 
         private void dgvCommandes_CellContentClick(object sender, DataGridViewCellEventArgs e)
