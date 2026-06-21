@@ -43,7 +43,7 @@ namespace Pharmacien
 
         private void btnProposer_Click(object sender, EventArgs e)
         {
-            // Ouvrir le formulaire de proposition de médicaments
+            // Ouvrir le formulaire de proposition de medicaments
             ProposerMedicamentsForm proposerForm = new ProposerMedicamentsForm(_apiService, _commande);
             var result = proposerForm.ShowDialog();
             if (result == DialogResult.OK)
@@ -61,7 +61,7 @@ namespace Pharmacien
 
         private void FicheSymptomesForm_Load(object sender, EventArgs e)
         {
-            // Rien à faire ici
+            
         }
     }
 }

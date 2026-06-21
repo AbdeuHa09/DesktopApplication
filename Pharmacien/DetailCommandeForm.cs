@@ -80,25 +80,46 @@ namespace Pharmacien
                     lblTotal.Text = $"{total:F2} MAD";
                 }
 
-                // ========== LOGIQUE DES BOUTONS CORRIGÉE ==========
-                // Pour SELECTION et ORDONNANCE : validation directe depuis "en_attente"
+                // ========== LOGIQUE DES BOUTONS AVEC VÉRIFICATION ORDONNANCE ==========
+                // Pour SELECTION : validation directe depuis "en_attente"
+                // Pour ORDONNANCE : validation seulement si en_attente ET médicaments proposés
                 // Pour SYMPTOMES : validation après acceptation client (statut "en_cours")
-                if (_commande.type_commande == "selection" || _commande.type_commande == "ordonnance")
+
+                if (_commande.type_commande == "selection")
                 {
                     btnValider.Enabled = (_commande.statut == "en_attente");
                     cmbLivreur.Enabled = (_commande.statut == "en_attente");
+                }
+                else if (_commande.type_commande == "ordonnance")
+                {
+                    // Vérifier si des médicaments ont été proposés
+                    bool aDesMedicaments = _commande.ligne_medicaments != null && _commande.ligne_medicaments.Count > 0;
+
+                    btnValider.Enabled = (_commande.statut == "en_attente" && aDesMedicaments);
+                    cmbLivreur.Enabled = (_commande.statut == "en_attente" && aDesMedicaments);
+
+                    // Message d'information
+                    if (_commande.statut == "en_attente" && !aDesMedicaments)
+                    {
+                        btnValider.Text = "⚠️ Proposez d'abord des médicaments";
+                    }
+                    else
+                    {
+                        btnValider.Text = "✓ Valider";
+                    }
                 }
                 else // SYMPTOMES
                 {
                     btnValider.Enabled = (_commande.statut == "en_cours");
                     cmbLivreur.Enabled = (_commande.statut == "en_cours");
+                    btnValider.Text = "✓ Valider";
                 }
 
                 btnValider.Visible = true;
                 btnRefuser.Enabled = (_commande.statut == "en_attente");
                 btnRefuser.Visible = true;
                 cmbLivreur.Visible = true;
-                // ==================================================
+                // ==========================================================
 
                 if (_commande.statut == "refusee" && _commande.livraison != null && !string.IsNullOrEmpty(_commande.livraison.justification))
                 {

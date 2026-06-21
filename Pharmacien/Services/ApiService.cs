@@ -109,13 +109,12 @@ namespace Pharmacien.Services
             return JsonConvert.DeserializeObject<List<Medicament>>(json, _jsonSettings) ?? new List<Medicament>();
         }
 
-        public async Task<string> UpdateStock(int medicamentId, int quantiteStock)
+        public async Task<bool> UpdateStock(int medicamentId, int quantiteStock)
         {
             var data = new { quantite_stock = quantiteStock };
             var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync($"{BASE_URL}/pharmacien/medicaments/{medicamentId}/stock", content);
-            var json = await response.Content.ReadAsStringAsync();
-            return json;
+            return response.IsSuccessStatusCode;
         }
         public async Task<bool> AjouterMedicament(Medicament medicament)
         {
